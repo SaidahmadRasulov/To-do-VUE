@@ -7,7 +7,7 @@
           <div class="checkbox p-2 border-2 border-gray-600 rounded-md"
             @click="handleToggle(item.id)"
           ></div>
-          <h1 class="line-through">{{ item.title }}</h1>
+          <h1>{{ item.title }}</h1>
         </div>
         <div class="checked flex items-center gap-4" v-else>
           <div class="checkbox p-2 border-2 border-gray-600 rounded-md"
