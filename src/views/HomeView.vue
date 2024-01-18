@@ -1,20 +1,72 @@
 <template>
   <div class="container w-[1200px] mx-auto">
-    <Control :checked="checked" @filter="handleFilter" @add="handleAdd" />
+    <Control
+      :isActive="isActive"
+      :checked="checked"
+      @filter="handleFilter"
+      @add="handleAdd"
+    />
     <div class="box w-1/2 mx-auto p-4 shadow-lg rounded-lg bg-orange-300">
-      <div class="list py-4 text-white" v-for="item in todos">
-        <div class="checked flex items-center gap-4" v-if="checked">
-          <div class="checkbox p-2 border-2 border-gray-600 rounded-md"
-            @click="handleToggle(item.id)"
-          ></div>
-          <h1>{{ item.title }}</h1>
+      <div
+        class="list py-4 text-white"
+        v-if="todos.length > 0"
+        v-for="item in todos"
+        :key="item.id"
+      >
+        <div
+          class="checked flex items-center justify-between"
+          v-if="item.checked"
+        >
+          <div class="flex items-center gap-4">
+            <i
+              class="bx bx-check-square cursor-pointer text-[36px]"
+              @click="handleToggle(item.id)"
+            ></i>
+            <h1 class="text-2xl relative">
+              <div
+                class="line_div before:absolute before:w-full before:h-1 before:bg-red-700 before:top-4 before:transition-all transition-all delay-75 before:delay-75"
+              ></div>
+              {{ item.title }}
+            </h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <i
+              @click="handleEdit(item)"
+              class="bx bx-pencil text-gray-500 text-lg hover:text-white cursor-pointer transition-colors delay-75"
+            ></i>
+            <i
+              class="bx bx-trash text-red-600 text-lg hover:text-white cursor-pointer transition-colors delay-75"
+              @click="handleDelete(item.id)"
+            ></i>
+          </div>
         </div>
-        <div class="checked flex items-center gap-4" v-else>
-          <div class="checkbox p-2 border-2 border-gray-600 rounded-md"
-            @click="handleToggle(item.id)"
-          ></div>
-          <h1 class="line-through">{{ item.title }}</h1>
+        <div class="checked flex items-center justify-between" v-else>
+          <div class="flex items-center gap-4">
+            <i
+              class="bx bx-checkbox cursor-pointer text-[36px]"
+              @click="handleToggle(item.id)"
+            ></i>
+            <h1 class="text-2xl relative">
+              <div
+                class="line_div before:absolute before:w-0 before:h-1 before:bg-red-700 before:top-4 before:transition-all before:delay-75"
+              ></div>
+              {{ item.title }}
+            </h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <i
+              @click="handleEdit(item)"
+              class="bx bx-pencil text-gray-500 text-lg hover:text-white cursor-pointer transition-colors delay-75"
+            ></i>
+            <i
+              class="bx bx-trash text-red-600 text-lg hover:text-white cursor-pointer transition-colors delay-75"
+              @click="handleDelete(item.id)"
+            ></i>
+          </div>
         </div>
+      </div>
+      <div v-else class="text-center py-4 text-white text-2xl">
+        <h1>Not Data</h1>
       </div>
     </div>
   </div>
@@ -37,6 +89,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    isActive: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     handleAdd(val) {
@@ -46,7 +102,13 @@ export default {
       this.$emit("filter", val);
     },
     handleToggle(id) {
-      this.$emit('check', id)
+      this.$emit("check", id);
+    },
+    handleDelete(id) {
+      this.$emit("delete", id);
+    },
+    handleEdit(obj) {
+      this.$emit("edit", obj);
     },
   },
   components: { Control },
