@@ -1,7 +1,3 @@
-<script setup>
-  import { ref } from 'vue';
-</script>
-
 <template>
   <div>
     <HomeView
@@ -30,9 +26,7 @@ export default {
       filter: "all",
       checked: false,
       isActive: "all",
-      isEdit: {},
-      startEdit: false,
-      inputRef: ref
+      editVal: {}
     };
   },
   mounted() {
@@ -76,11 +70,16 @@ export default {
       },
       deep: true,
     },
+    handleEdit: {
+      handler(oldValue, newValue){
+        oldValue.title = newValue.title
+      },
+      deep: true
+    }
   },
   methods: {
     handleAdd(val) {
-      if (!this.startEdit) {
-        if (val.trim() !== "") {
+      if (val.trim() !== "") {
           const newTodo = {
             id: Date.now(),
             title: val,
@@ -92,10 +91,6 @@ export default {
         setTimeout(() => {
           this.newTodos = [];
         }, 40000);
-      } else {
-        val = this.isEdit.title;
-        console.log(val);
-      }
     },
     handleFilter(val) {
       this.filter = val;
@@ -128,9 +123,9 @@ export default {
       localStorage.setItem("rem-todos", this.removedTodos);
     },
     handleEdit(obj) {
-      this.isEdit = obj;
-      this.startEdit = true;
-      this.handleAdd();
+      this.editVal = obj;
+      console.log(this.editVal)
+      // localStorage.setItem('todos', this.todos)
     },
   },
   computed: {
