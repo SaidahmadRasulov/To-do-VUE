@@ -26,7 +26,7 @@ export default {
       filter: "all",
       checked: false,
       isActive: "all",
-      editVal: {}
+      editVal: {},
     };
   },
   mounted() {
@@ -38,6 +38,8 @@ export default {
     this.removedTodos = removedTodos ? JSON.parse(removedTodos) : [];
     const doneArray = localStorage.getItem("don-todos");
     this.doneTodos = doneArray ? JSON.parse(doneArray) : [];
+    const activeClasses = localStorage.getItem("active-class");
+    this.isActive = activeClasses ? JSON.parse(activeClasses) : "all";
   },
   watch: {
     todos: {
@@ -64,37 +66,41 @@ export default {
       },
       deep: true,
     },
-    handleAdd: {
-      handler(newValue) {
-        console.log(newValue);
+    handleEdit: {
+      handler(newObj) {
+        const index = this.todos.findIndex((todo) => todo.id === newObj.id);
+        if (index !== -1) {
+          this.$set(this.todos, index, newObj);
+        }
       },
       deep: true,
     },
-    handleEdit: {
-      handler(oldValue, newValue){
-        oldValue.title = newValue.title
+    isActive: {
+      handler(newClass) {
+        localStorage.setItem("active-class", JSON.stringify(newClass));
       },
-      deep: true
-    }
+    },
   },
   methods: {
     handleAdd(val) {
       if (val.trim() !== "") {
-          const newTodo = {
-            id: Date.now(),
-            title: val,
-            checked: false,
-          };
-          this.todos.push(newTodo);
-          this.newTodos.push(newTodo);
-        }
-        setTimeout(() => {
-          this.newTodos = [];
-        }, 40000);
+        const newTodo = {
+          id: Date.now(),
+          title: val,
+          checked: false,
+        };
+        this.todos.push(newTodo);
+        this.newTodos.push(newTodo);
+      }
+      localStorage.setItem('new-todos', this.newTodos)
+      setTimeout(() => {
+        this.newTodos = [];
+      }, 50000);
     },
     handleFilter(val) {
       this.filter = val;
       this.isActive = this.filter;
+      localStorage.setItem("active-class", this.isActive);
     },
     handleChange(id) {
       this.todos.map((item) => {
@@ -124,8 +130,7 @@ export default {
     },
     handleEdit(obj) {
       this.editVal = obj;
-      console.log(this.editVal)
-      // localStorage.setItem('todos', this.todos)
+      localStorage.setItem("todos", this.todos);
     },
   },
   computed: {

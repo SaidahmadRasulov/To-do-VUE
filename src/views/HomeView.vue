@@ -25,12 +25,11 @@
             <div class="w-full relative">
               <input
                 type="text"
-                @input="Editing"
                 :value="item.title"
                 class="bg-inherit outline-none text-2xl w-full"
               />
               <Transition name="entering">
-                <div class="line_div bg-red-700 absolute top-1/2 w-full h-1"></div>
+                <div class="line_div active"></div>
               </Transition>
             </div>
           </div>
@@ -54,12 +53,12 @@
             <div class="relative w-full">
               <input
                 type="text"
-                @input="Editing"
                 :value="item.title"
+                :key="item.id"
                 class="bg-inherit outline-none text-2xl w-full"
               />
               <Transition name="out">
-                <div class="line_div bg-red-700 absolute top-1/2 w-0 h-1"></div>
+                <div class="line_div"></div>
               </Transition>
             </div>
           </div>
@@ -125,14 +124,20 @@ export default {
 };
 </script>
 <style>
-.entering-enter-active, .out-leave-active {
-  transition: all .5s ease-in-out !important;
-  width: 50%;
+.line_div::before {
+  position: absolute;
+  content: '';
+  width: 0px;
+  height: 2px;
+  top: 50%;
+  transition: all 3s ease-in-out;
 }
-.entering-enter-from, .out-leave-to {
-  width: 0% !important;
-}
-.entering-enter-to, .out-leave-from {
+.line_div.active::before{
+  position: absolute;
+  content: '';
   width: 100%;
+  height: 2px;
+  background-color: rgb(172, 13, 13);
+  transition: all 3s ease-in-out;
 }
 </style>

@@ -62,6 +62,9 @@ export default {
   methods: {
     handleAdd() {
       this.$emit("add", this.inputValue);
+      if(this.inputValue !== '') {
+        this.inputValue = ''
+      } 
     },
     handleFilter(val) {
       this.$emit("filter", val);
